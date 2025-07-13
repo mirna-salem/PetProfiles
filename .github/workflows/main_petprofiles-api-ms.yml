@@ -24,7 +24,7 @@ jobs:
           dotnet-version: 'v9.0'
 
       - name: Restore dependencies
-        run: dotnet restore PetProfiles.Api
+        run: dotnet restore
 
       - name: Build with dotnet
         run: dotnet build PetProfiles.Api --configuration Release --no-restore
