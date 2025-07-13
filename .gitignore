@@ -1,20 +1,212 @@
-bin/
-obj/
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio files
+.vs/
 *.user
-*.suo
 *.userosscache
 *.sln.docstates
-.vs/
-# Rider
+*.userprefs
+*.suo
+*.user
+*.rsuser
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# JetBrains Rider
 .idea/
 *.sln.iml
-# Mac
+
+# Mono auto generated files
+mono_crash.*
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+# macOS
 .DS_Store
-# Logs
-*.log
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Android
+*.apk
+*.aab
+*.ap_
+*.dex
+
+# iOS
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Windows
+*.appx
+*.appxbundle
+*.msix
+*.msixbundle
+
+# MAUI specific
+Platforms/Android/obj/
+Platforms/Android/bin/
+Platforms/iOS/obj/
+Platforms/iOS/bin/
+Platforms/macOS/obj/
+Platforms/macOS/bin/
+Platforms/Windows/obj/
+Platforms/Windows/bin/
+
+# NuGet
+*.nupkg
+*.snupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+*.nuget.props
+*.nuget.targets
+
 # Azure
 *.Publish.xml
-# User secrets
-secrets.json 
-appsettings.Development.json
 /Properties/PublishProfiles/
+
+# User secrets and sensitive configuration
+secrets.json
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.json
+!appsettings.json
+!appsettings.Example.json
+
+# API Keys and secrets
+**/Services/ApiConfiguration.cs
+**/Services/ApiConfiguration.Example.cs
+!**/Services/ApiConfiguration.Example.cs
+
+# Environment files
+.env
+.env.local
+.env.development
+.env.production
+*.env
+
+# Certificates and keys
+*.pfx
+*.p12
+*.key
+*.pem
+*.crt
+*.cer
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+*.mdf
+*.ldf
+
+# Logs
+*.log
+logs/
+Logs/
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# IDE specific
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Test results
+TestResults/
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# Coverage reports
+*.coverage
+*.coveragexml
+coverage/
+
+# Performance reports
+*.perf
+
+# Profiling reports
+*.prof
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Local configuration overrides
+local.settings.json
+local.settings.*.json
+
+# User-specific files
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build artifacts
+*.dll
+*.exe
+*.pdb
+*.cache
