@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using PetProfiles.Api.Models;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
+using Microsoft.Extensions.Time.Testing;
 
 namespace PetProfiles.Api.Services;
 
@@ -14,9 +15,9 @@ public class ApiKeyAuthHandler : AuthenticationHandler<AuthenticationSchemeOptio
         IOptionsMonitor<AuthenticationSchemeOptions> options,
         ILoggerFactory logger,
         UrlEncoder encoder,
-        ISystemClock clock,
+        TimeProvider timeProvider,
         IOptions<ApiKeyAuthOptions> apiKeyOptions)
-        : base(options, logger, encoder, clock)
+        : base(options, logger, encoder, timeProvider)
     {
         _apiKeyOptions = apiKeyOptions.Value;
     }
