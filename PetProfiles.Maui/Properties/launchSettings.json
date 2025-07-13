@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Windows Machine": {
+      "commandName": "Project",
+      "nativeDebugging": false,
+      "applicationUrl": "http://0.0.0.0:7027"
+    }
+  }
+}

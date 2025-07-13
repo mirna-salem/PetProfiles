@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup
+    x:Class="PetProfiles.Maui.Views.AddPetProfilePopup"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    BackgroundColor="Transparent">
+    <Frame BackgroundColor="{AppThemeBinding Light=White, Dark={StaticResource Gray800}}" 
+           BorderColor="Transparent"
+           HasShadow="False"
+           CornerRadius="12"
+           Padding="20"
+           WidthRequest="320">
+        <VerticalStackLayout Spacing="16">
+            <Label Text="{Binding IsEditMode, Converter={StaticResource EditModeTitleConverter}}"
+                   FontSize="20" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center"
+                   TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
+            <VerticalStackLayout Spacing="4">
+                <Entry Placeholder="Name" 
+                       Text="{Binding Name}"
+                       TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                       PlaceholderColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"/>
+                <Label Text="{Binding NameError}" 
+                       TextColor="Red" 
+                       FontSize="12" 
+                       IsVisible="{Binding NameError, Converter={StaticResource StringToBoolConverter}}"/>
+            </VerticalStackLayout>
+            <VerticalStackLayout Spacing="4">
+                <Entry Placeholder="Breed" 
+                       Text="{Binding Breed}"
+                       TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                       PlaceholderColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"/>
+                <Label Text="{Binding BreedError}" 
+                       TextColor="Red" 
+                       FontSize="12" 
+                       IsVisible="{Binding BreedError, Converter={StaticResource StringToBoolConverter}}"/>
+            </VerticalStackLayout>
+            <VerticalStackLayout Spacing="4">
+                <Entry Placeholder="Age" 
+                       Keyboard="Numeric" 
+                       Text="{Binding Age}"
+                       TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                       PlaceholderColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"/>
+                <Label Text="{Binding AgeError}" 
+                       TextColor="Red" 
+                       FontSize="12" 
+                       IsVisible="{Binding AgeError, Converter={StaticResource StringToBoolConverter}}"/>
+            </VerticalStackLayout>
+            <Grid IsVisible="{Binding HasSelectedImage}" HeightRequest="100" WidthRequest="100">
+                <Image Source="{Binding SelectedImage}" HeightRequest="100" WidthRequest="100" Aspect="AspectFill" HorizontalOptions="Center" VerticalOptions="Center"/>
+                <Image Source="circle_13759398.png"
+                       WidthRequest="32"
+                       HeightRequest="32"
+                       HorizontalOptions="End"
+                       VerticalOptions="End"
+                       Margin="0,0,-10,-10">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding DeleteImageCommand}"/>
+                    </Image.GestureRecognizers>
+                </Image>
+            </Grid>
+            <Button Text="Upload Image" Command="{Binding UploadImageCommand}"/>
+            <HorizontalStackLayout Spacing="12" HorizontalOptions="Center">
+                <Button Text="Cancel" Command="{Binding CancelCommand}" WidthRequest="120"/>
+                <Button Text="{Binding IsEditMode, Converter={StaticResource EditModeButtonConverter}}" 
+                        Command="{Binding SaveCommand}" 
+                        WidthRequest="120"
+                        IsEnabled="{Binding HasErrors, Converter={StaticResource InverseBoolConverter}}"/>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </Frame>
+</toolkit:Popup> 
