@@ -8,10 +8,11 @@ public partial class PetProfilesPage : ContentPage
 {
     private bool _hasLoadedOnce = false;
 
-    public PetProfilesPage(PetProfilesViewModel viewModel)
+    public PetProfilesPage(PetProfilesViewModel viewModel, ThemeViewModel themeViewModel)
     {
         InitializeComponent();
         BindingContext = viewModel;
+        ThemeToggleButton.BindingContext = themeViewModel;
     }
 
     protected override async void OnAppearing()

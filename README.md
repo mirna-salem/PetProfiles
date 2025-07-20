@@ -106,6 +106,11 @@ PetProfiles/
 
 This project demonstrates enterprise-level development skills. Feel free to fork and enhance it for your portfolio!
 
+## Attributions
+
+<a href="https://www.flaticon.com/free-icons/sun" title="sun icons">Sun icons created by DinosoftLabs - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/moon" title="moon icons">Moon icons created by Vectors Market - Flaticon</a>
+
 ---
 
 **Built with ❤️ using .NET 9, MAUI, and Azure Cloud Services** 

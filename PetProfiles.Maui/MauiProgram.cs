@@ -31,9 +31,16 @@ public static class MauiProgram
 		
 		// Register ViewModels
 		builder.Services.AddTransient<PetProfilesViewModel>();
+		builder.Services.AddSingleton<ThemeViewModel>();
 		
 		// Register Views
 		builder.Services.AddTransient<PetProfilesPage>();
+		builder.Services.AddSingleton<AppShell>(sp =>
+    new AppShell(
+        sp.GetRequiredService<PetProfilesViewModel>(),
+        sp.GetRequiredService<ThemeViewModel>()
+    )
+);
 
 #if DEBUG
 		builder.Logging.AddDebug();

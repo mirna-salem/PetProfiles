@@ -8,31 +8,44 @@
     <Grid RowDefinitions="Auto,*,Auto">
         <!-- Header -->
         <Grid Grid.Row="0" 
-              BackgroundColor="White"
+              BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark=Black}"
               Padding="20,10">
-            <Grid ColumnDefinitions="*,Auto,Auto">
-                <Image Grid.Column="0"
-                       Source="header.png"
-                       BackgroundColor="Transparent"
-                       HeightRequest="50"
-                       WidthRequest="200"/>
-                <ImageButton Grid.Column="1"
-                             Source="refresh.png"
-                             BackgroundColor="Transparent"
-                             Command="{Binding LoadPetProfilesCommand}"
-                             WidthRequest="40"                           
-                             HeightRequest="40"
-                             CornerRadius="20"
-                             Margin="0,0,10,0"/>
-
-                <ImageButton Grid.Column="2"
-                             Source="plus.png"
-                             BackgroundColor="Transparent"
-                             Command="{Binding AddPetProfileCommand}"
-                             WidthRequest="40"                           
-                             HeightRequest="40"
-                             CornerRadius="20"/>
-            </Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <!-- Theme Toggle Button -->
+            <ImageButton x:Name="ThemeToggleButton"
+                         Source="{Binding ThemeIcon}"
+                         Command="{Binding ToggleThemeCommand}"
+                         BackgroundColor="Transparent"
+                         WidthRequest="40"
+                         HeightRequest="40"
+                         CornerRadius="20"
+                         Margin="0,0,10,0"/>
+            <!-- Existing header image and buttons, shift columns right -->
+            <Image Grid.Column="1"
+                   Source="header.png"
+                   BackgroundColor="Transparent"
+                   HeightRequest="50"
+                   WidthRequest="200"/>
+            <ImageButton Grid.Column="2"
+                         Source="refresh.png"
+                         BackgroundColor="Transparent"
+                         Command="{Binding LoadPetProfilesCommand}"
+                         WidthRequest="40"                           
+                         HeightRequest="40"
+                         CornerRadius="20"
+                         Margin="0,0,10,0"/>
+            <ImageButton Grid.Column="3"
+                         Source="plus.png"
+                         BackgroundColor="Transparent"
+                         Command="{Binding AddPetProfileCommand}"
+                         WidthRequest="40"                           
+                         HeightRequest="40"
+                         CornerRadius="20"/>
         </Grid>
 
         <!-- Content -->
