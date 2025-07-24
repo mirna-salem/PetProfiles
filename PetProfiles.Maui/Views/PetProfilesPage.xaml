@@ -8,7 +8,7 @@
     <Grid RowDefinitions="Auto,*,Auto">
         <!-- Header -->
         <Grid Grid.Row="0" 
-              BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark=Black}"
+              BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray900}}"
               Padding="20,10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
