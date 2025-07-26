@@ -1,116 +1,81 @@
-# 🐾 PetProfiles - Full-Stack .NET Cloud Application
+# PetProfiles
 
-> **Modern full-stack .NET application demonstrating enterprise-level cloud development skills**
+A full-stack .NET application for managing pet profiles. Built with .NET MAUI for the frontend and .NET 9 Web API for the backend, deployed to Azure.
 
-## 🚀 What This Project Shows
+## What it does
 
-**Full-Stack .NET Development** | **Azure Cloud Integration** | **CI/CD Pipeline** | **Cross-Platform Mobile**
+This is a pet profile management system where you can add, view, and manage pet information. The app works on mobile devices (iOS, Android) and desktop (Windows, macOS).
 
-A complete pet profile management system built with cutting-edge .NET technologies, deployed to Azure with automated CI/CD, showcasing real-world cloud development expertise.
+## Tech stack
 
-## 🏗️ Architecture
+- **Frontend**: .NET MAUI with MVVM pattern
+- **Backend**: .NET 9 Web API with Entity Framework Core
+- **Database**: Azure SQL Database
+- **Storage**: Azure Blob Storage for images
+- **Deployment**: Azure App Service
+- **CI/CD**: GitHub Actions
 
-```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   .NET MAUI     │    │   .NET 9 API    │    │   Azure Cloud   │
-│   Frontend      │◄──►│   Backend       │◄──►│   Services      │
-│   (Mobile/Web)  │    │   (REST API)    │    │   (SQL/Blob)    │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-```
+## Features
 
-## 🛠️ Tech Stack
+- Add and manage pet profiles with photos
+- Cross-platform mobile app
+- RESTful API with authentication
+- Cloud storage for images
+- Dark/light theme support
+- Real-time data sync
 
-| **Frontend** | **Backend** | **Cloud** | **DevOps** |
-|--------------|-------------|-----------|------------|
-| .NET MAUI | .NET 9 Web API | Azure App Service | GitHub Actions |
-| MVVM Pattern | Entity Framework Core | Azure SQL Database | Azure DevOps |
-| Cross-Platform | RESTful APIs | Azure Blob Storage | Automated Testing |
-| XAML UI | Serilog Logging | Application Insights | CI/CD Pipeline |
+## Live demo
 
-## ✨ Key Features
+- API: https://petprofiles-api-ms-ddhsemepgwdahxcm.canadacentral-01.azurewebsites.net/
+- API docs: https://petprofiles-api-ms-ddhsemepgwdahxcm.canadacentral-01.azurewebsites.net/swagger
 
-- **🔐 Secure API** with API key authentication
-- **📱 Cross-platform** mobile app (iOS, Android, Windows, macOS)
-- **☁️ Cloud-native** with Azure integration
-- **🔄 Real-time** data synchronization
-- **📊 Structured logging** with Application Insights
-- **🧪 Automated testing** and deployment
-- **🎨 Modern UI** with dark/light themes
-
-## 🚀 Live Demo
-
-- **API**: [https://petprofiles-api-ms.azurewebsites.net](https://petprofiles-api-ms.azurewebsites.net)
-- **Swagger Docs**: [https://petprofiles-api-ms.azurewebsites.net/swagger](https://petprofiles-api-ms.azurewebsites.net/swagger)
-
-## 📱 Screenshots
-
-*[Add screenshots of your MAUI app here]*
-
-## 🏆 Key Highlights
-
-- **Enterprise Architecture** - Clean separation of concerns with proper layering
-- **Cloud-Native Development** - Full Azure integration with best practices
-- **Modern .NET Stack** - Latest .NET 9 with MAUI for cross-platform
-- **DevOps Excellence** - Automated CI/CD with GitHub Actions
-- **Production-Ready** - Logging, monitoring, error handling
-- **Scalable Design** - Microservices-ready architecture  
-
-## 🚀 Quick Start
+## Getting started
 
 ```bash
-# Clone the repository
+# Clone the repo
 git clone https://github.com/yourusername/PetProfiles.git
 cd PetProfiles
 
-# Run the API
-cd PetProfiles.Api
-dotnet run
-
-# Run the MAUI app
-cd ../PetProfiles.Maui
+# Run the MAUI app (API is already hosted on Azure)
+cd PetProfiles.Maui
 dotnet run
 ```
 
-## 📁 Project Structure
+## Project structure
 
 ```
 PetProfiles/
-├── PetProfiles.Api/          # .NET 9 Web API
-│   ├── Controllers/          # REST endpoints
+├── PetProfiles.Api/          # Web API backend
+│   ├── Controllers/          # API endpoints
 │   ├── Services/             # Business logic
 │   ├── Models/               # Data models
-│   └── Data/                 # Entity Framework
-├── PetProfiles.Maui/         # Cross-platform mobile app
-│   ├── Views/                # XAML UI pages
-│   ├── ViewModels/           # MVVM pattern
-│   └── Services/             # API integration
-└── .github/workflows/        # CI/CD pipeline
+│   └── Data/                 # Database context
+├── PetProfiles.Maui/         # Mobile app
+│   ├── Views/                # UI pages
+│   ├── ViewModels/           # MVVM view models
+│   └── Services/             # API client
+└── .github/workflows/        # CI/CD
 ```
 
-## 🔧 Development Skills Demonstrated
+## What I learned
 
-- **Backend**: ASP.NET Core, Entity Framework, REST APIs, Authentication
-- **Frontend**: .NET MAUI, XAML, MVVM, Cross-platform development
-- **Cloud**: Azure App Service, SQL Database, Blob Storage, Application Insights
-- **DevOps**: GitHub Actions, CI/CD, Automated testing, Deployment
-- **Architecture**: Clean Architecture, Dependency Injection, SOLID principles
+This project helped me understand:
+- Building cross-platform apps with .NET MAUI
+- Creating REST APIs with ASP.NET Core
+- Azure cloud services integration
+- CI/CD pipelines with GitHub Actions
+- Clean architecture and SOLID principles
 
-## 📈 Performance & Scalability
+## Future plans
 
-- **Response Time**: < 200ms average API response
-- **Scalability**: Horizontal scaling with Azure App Service
-- **Reliability**: 99.9% uptime with Azure SLA
-- **Monitoring**: Real-time insights with Application Insights
-
-## 🤝 Contributing
-
-This project demonstrates enterprise-level development skills. Feel free to fork and enhance it for your portfolio!
+I'm planning to expand this into a full pet health tracker. Eventually I want to add:
+- User authentication and sign-in
+- Health tracking features (vaccinations, vet visits, medications)
+- Weight and activity monitoring
+- Heart rate monitoring for dogs
+- Reminders and notifications
+- Vet appointment scheduling
 
 ## Attributions
 
-<a href="https://www.flaticon.com/free-icons/sun" title="sun icons">Sun icons created by DinosoftLabs - Flaticon</a>
-<a href="https://www.flaticon.com/free-icons/moon" title="moon icons">Moon icons created by Vectors Market - Flaticon</a>
-
----
-
-**Built with ❤️ using .NET 9, MAUI, and Azure Cloud Services** 
+Sun and moon icons from Flaticon 
