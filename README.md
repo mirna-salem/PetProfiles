@@ -9,7 +9,7 @@ This is a pet profile management system where you can add, view, and manage pet 
 ## Tech stack
 
 - **Frontend**: .NET MAUI with MVVM pattern
-- **Backend**: .NET 9 Web API with Entity Framework Core
+- **Backend**: ASP.NET Core 9 Web API with Entity Framework Core
 - **Database**: Azure SQL Database
 - **Storage**: Azure Blob Storage for images
 - **Deployment**: Azure App Service
