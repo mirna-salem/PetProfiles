@@ -14,15 +14,15 @@ namespace PetProfiles.Maui.ViewModels;
 public class PetProfilesViewModel : BaseViewModel
 {
     private readonly IPetProfilesService _petProfilesService;
-    private readonly IImagePreloadService _imagePreloadService;
+    private readonly IPetProfileCacheService _profileCacheService;
     private PetProfile? _selectedPetProfile;
     private bool _isLoading;
     private static bool _isPopupOpen = false;
 
-    public PetProfilesViewModel(IPetProfilesService petProfilesService, IImagePreloadService imagePreloadService)
+    public PetProfilesViewModel(IPetProfilesService petProfilesService, IPetProfileCacheService profileCacheService)
     {
         _petProfilesService = petProfilesService;
-        _imagePreloadService = imagePreloadService;
+        _profileCacheService = profileCacheService;
         Title = "Pet Profiles";
         
         PetProfiles = new ObservableCollection<PetProfile>();
@@ -61,17 +61,23 @@ public class PetProfilesViewModel : BaseViewModel
             IsBusy = true;
             IsLoading = true;
 
-            var profiles = await _petProfilesService.GetPetProfilesAsync();
-            
-            // Pre-load images BEFORE adding to UI
-            await _imagePreloadService.PreloadImagesAsync(profiles);
-            
-            // Only clear and update if we successfully got data
-            PetProfiles.Clear();
-            foreach (var profile in profiles)
+            // Try to load from cache first
+            var cachedProfiles = await _profileCacheService.GetCachedProfilesAsync();
+            if (cachedProfiles.Any())
             {
-                PetProfiles.Add(profile);
+                PetProfiles.Clear();
+                foreach (var profile in cachedProfiles)
+                {
+                    PetProfiles.Add(profile);
+                }
+                
+                // Load fresh data in background
+                _ = Task.Run(async () => await LoadFreshDataAsync());
+                return;
             }
+
+            // No cache, load from API
+            await LoadFreshDataAsync();
         }
         catch (Exception ex)
         {
@@ -82,6 +88,31 @@ public class PetProfilesViewModel : BaseViewModel
         {
             IsBusy = false;
             IsLoading = false;
+        }
+    }
+    
+    private async Task LoadFreshDataAsync()
+    {
+        try
+        {
+            var profiles = await _petProfilesService.GetPetProfilesAsync();
+            
+            // Cache the profiles with images
+            await _profileCacheService.CacheProfilesAsync(profiles);
+            
+            // Update UI on main thread
+            await MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                PetProfiles.Clear();
+                foreach (var profile in profiles)
+                {
+                    PetProfiles.Add(profile);
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error loading fresh data: {ex.Message}");
         }
     }
 

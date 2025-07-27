@@ -23,7 +23,7 @@ public static class MauiProgram
 		// Register services
 		builder.Services.AddHttpClient();
 		builder.Services.AddSingleton<IValidationService, ValidationService>();
-		builder.Services.AddSingleton<IImagePreloadService, ImagePreloadService>();
+		builder.Services.AddSingleton<IPetProfileCacheService, PetProfileCacheService>();
 #if DEBUG
 		builder.Services.AddSingleton<IPetProfilesService, MockPetProfilesService>();
 #else
