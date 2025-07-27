@@ -5,10 +5,10 @@ namespace PetProfiles.Api.Services;
 public class LocalCacheService : ICacheService
 {
     private readonly ConcurrentDictionary<string, CacheItem> _cache;
-    private readonly ILogger<InMemoryCacheService> _logger;
+    private readonly ILogger<LocalCacheService> _logger;
     private readonly Timer _cleanupTimer;
 
-    public InMemoryCacheService(ILogger<InMemoryCacheService> logger)
+    public LocalCacheService(ILogger<LocalCacheService> logger)
     {
         _cache = new ConcurrentDictionary<string, CacheItem>();
         _logger = logger;
@@ -17,7 +17,7 @@ public class LocalCacheService : ICacheService
         _cleanupTimer = new Timer(CleanupExpiredItems, null, TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1));
     }
 
-    public async Task<T?> GetAsync<T>(string key)
+    public Task<T?> GetAsync<T>(string key)
     {
         try
         {
@@ -31,20 +31,20 @@ public class LocalCacheService : ICacheService
                 }
 
                 _logger.LogDebug("Cache hit for key: {Key}", key);
-                return (T)cacheItem.Value;
+                return Task.FromResult<T?>((T)cacheItem.Value);
             }
 
             _logger.LogDebug("Cache miss for key: {Key}", key);
-            return default;
+            return Task.FromResult<T?>(default);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error getting value from cache for key: {Key}", key);
-            return default;
+            return Task.FromResult<T?>(default);
         }
     }
 
-    public async Task SetAsync<T>(string key, T value, TimeSpan? expiration = null)
+    public Task SetAsync<T>(string key, T value, TimeSpan? expiration = null)
     {
         try
         {
@@ -52,7 +52,7 @@ public class LocalCacheService : ICacheService
                 ? DateTime.UtcNow.Add(expiration.Value) 
                 : DateTime.UtcNow.AddMinutes(10);
 
-            var cacheItem = new CacheItem(value, expirationTime);
+            var cacheItem = new CacheItem(value!, expirationTime);
             _cache.AddOrUpdate(key, cacheItem, (k, v) => cacheItem);
             
             _logger.LogDebug("Cached value for key: {Key} with expiration: {Expiration}", key, expirationTime);
@@ -61,9 +61,11 @@ public class LocalCacheService : ICacheService
         {
             _logger.LogError(ex, "Error setting value in cache for key: {Key}", key);
         }
+        
+        return Task.CompletedTask;
     }
 
-    public async Task RemoveAsync(string key)
+    public Task RemoveAsync(string key)
     {
         try
         {
@@ -76,9 +78,11 @@ public class LocalCacheService : ICacheService
         {
             _logger.LogError(ex, "Error removing cache entry for key: {Key}", key);
         }
+        
+        return Task.CompletedTask;
     }
 
-    public async Task RemoveByPatternAsync(string pattern)
+    public Task RemoveByPatternAsync(string pattern)
     {
         try
         {
@@ -97,6 +101,8 @@ public class LocalCacheService : ICacheService
         {
             _logger.LogError(ex, "Error removing cache entries by pattern: {Pattern}", pattern);
         }
+        
+        return Task.CompletedTask;
     }
 
     private void CleanupExpiredItems(object? state)
