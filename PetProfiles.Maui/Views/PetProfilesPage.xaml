@@ -109,7 +109,7 @@
                                    CornerRadius="30"
                                    BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray700}}"
                                    HasShadow="False">
-                                <Image Source="{Binding ImageUrl, Converter={StaticResource ImageSourceConverter}}" 
+                                <Image Source="{Binding PreloadedImage}" 
                                        WidthRequest="60" 
                                        HeightRequest="60"
                                        HorizontalOptions="Center"

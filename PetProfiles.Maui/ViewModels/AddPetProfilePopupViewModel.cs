@@ -144,8 +144,31 @@ public class AddPetProfilePopupViewModel : BaseViewModel
             
             if (!string.IsNullOrEmpty(pet.ImageUrl))
             {
-                var converter = new Converters.ImageSourceConverter();
-                SelectedImage = (ImageSource)converter.Convert(pet.ImageUrl, typeof(ImageSource), null, System.Globalization.CultureInfo.CurrentCulture);
+                // Use pre-loaded image if available, otherwise load from cache
+                if (pet.PreloadedImage != null)
+                {
+                    SelectedImage = pet.PreloadedImage;
+                }
+                else
+                {
+                    // Fallback to loading from cache if not pre-loaded
+                    var converter = Converters.ImageSourceConverter.Instance;
+                    _ = Task.Run(async () =>
+                    {
+                        try
+                        {
+                            var imageSource = (ImageSource)converter.Convert(pet.ImageUrl, typeof(ImageSource), null, System.Globalization.CultureInfo.CurrentCulture);
+                            await MainThread.InvokeOnMainThreadAsync(() =>
+                            {
+                                SelectedImage = imageSource;
+                            });
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"Error loading image: {ex.Message}");
+                        }
+                    });
+                }
             }
             IsEditMode = true;
         }
@@ -296,4 +319,6 @@ public class AddPetProfilePopupViewModel : BaseViewModel
             System.Diagnostics.Debug.WriteLine($"Error disposing AddPetProfilePopupViewModel: {ex.Message}");
         }
     }
+    
+
 } 

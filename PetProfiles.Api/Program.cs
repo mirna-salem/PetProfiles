@@ -72,6 +72,9 @@ builder.Services.AddAuthorization();
 // Add Blob Storage Service
 builder.Services.AddScoped<IBlobStorageService, BlobStorageService>();
 
+// Add Local Cache Service
+builder.Services.AddSingleton<ICacheService, LocalCacheService>();
+
 
 
 // Add CORS

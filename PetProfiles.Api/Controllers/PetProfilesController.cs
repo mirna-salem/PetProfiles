@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PetProfiles.Api.Data;
 using PetProfiles.Api.Models;
+using PetProfiles.Api.Services;
 
 namespace PetProfiles.Api.Controllers;
 
@@ -15,13 +16,16 @@ namespace PetProfiles.Api.Controllers;
 public class PetProfilesController : BaseController
 {
     private readonly PetProfilesDbContext _context;
+    private readonly ICacheService _cacheService;
 
     public PetProfilesController(
         PetProfilesDbContext context, 
+        ICacheService cacheService,
         ILogger<PetProfilesController> logger) 
         : base(logger)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
+        _cacheService = cacheService ?? throw new ArgumentNullException(nameof(cacheService));
     }
 
     /// <summary>
@@ -33,7 +37,19 @@ public class PetProfilesController : BaseController
     {
         Logger.LogInformation("Getting all pet profiles");
         
+        // Try to get from cache first
+        var cachedProfiles = await _cacheService.GetAsync<IEnumerable<PetProfile>>(CacheKeys.AllPetProfiles);
+        if (cachedProfiles != null)
+        {
+            Logger.LogInformation("Returning cached pet profiles");
+            return Ok(cachedProfiles);
+        }
+        
+        // If not in cache, get from database
         var petProfiles = await _context.PetProfiles.ToListAsync();
+        
+        // Cache the result for 5 minutes
+        await _cacheService.SetAsync(CacheKeys.AllPetProfiles, petProfiles, TimeSpan.FromMinutes(5));
         
         return petProfiles;
     }
@@ -48,11 +64,22 @@ public class PetProfilesController : BaseController
     {
         Logger.LogInformation("Getting pet profile with ID: {Id}", id);
         
+        // Try to get from cache first
+        var cachedProfile = await _cacheService.GetAsync<PetProfile>(CacheKeys.PetProfile(id));
+        if (cachedProfile != null)
+        {
+            Logger.LogInformation("Returning cached pet profile for ID: {Id}", id);
+            return Ok(cachedProfile);
+        }
+        
         var petProfile = await GetPetProfileByIdAsync(id);
         if (petProfile == null)
         {
             return NotFound();
         }
+
+        // Cache the result for 10 minutes
+        await _cacheService.SetAsync(CacheKeys.PetProfile(id), petProfile, TimeSpan.FromMinutes(10));
 
         return petProfile;
     }
@@ -76,6 +103,9 @@ public class PetProfilesController : BaseController
         
         _context.PetProfiles.Add(petProfile);
         await _context.SaveChangesAsync();
+
+        // Invalidate cache
+        await _cacheService.RemoveAsync(CacheKeys.AllPetProfiles);
 
         return CreatedAtAction(nameof(GetPetProfile), new { id = petProfile.Id }, petProfile);
     }
@@ -113,6 +143,10 @@ public class PetProfilesController : BaseController
         try
         {
             await _context.SaveChangesAsync();
+            
+            // Invalidate cache
+            await _cacheService.RemoveAsync(CacheKeys.AllPetProfiles);
+            await _cacheService.RemoveAsync(CacheKeys.PetProfile(id));
         }
         catch (DbUpdateConcurrencyException)
         {
@@ -147,6 +181,10 @@ public class PetProfilesController : BaseController
         {
             _context.PetProfiles.Remove(petProfile);
             await _context.SaveChangesAsync();
+
+            // Invalidate cache
+            await _cacheService.RemoveAsync(CacheKeys.AllPetProfiles);
+            await _cacheService.RemoveAsync(CacheKeys.PetProfile(id));
 
             Logger.LogInformation("Pet profile deleted successfully: {Name}", petProfile.Name);
             return NoContent();

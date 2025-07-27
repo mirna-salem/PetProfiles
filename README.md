@@ -12,6 +12,7 @@ This is a pet profile management system where you can add, view, and manage pet 
 - **Backend**: ASP.NET Core 9 Web API with Entity Framework Core
 - **Database**: Azure SQL Database
 - **Storage**: Azure Blob Storage for images
+- **Cache**: In-memory caching with ConcurrentDictionary
 - **Deployment**: Azure App Service
 - **CI/CD**: GitHub Actions
 

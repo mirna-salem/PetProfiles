@@ -7,19 +7,22 @@ using PetProfiles.Maui.Views;
 using CommunityToolkit.Maui.Extensions;
 using CommunityToolkit.Maui;
 using System.Linq;
+using Microsoft.Maui.Controls;
 
 namespace PetProfiles.Maui.ViewModels;
 
 public class PetProfilesViewModel : BaseViewModel
 {
     private readonly IPetProfilesService _petProfilesService;
+    private readonly IImagePreloadService _imagePreloadService;
     private PetProfile? _selectedPetProfile;
     private bool _isLoading;
     private static bool _isPopupOpen = false;
 
-    public PetProfilesViewModel(IPetProfilesService petProfilesService)
+    public PetProfilesViewModel(IPetProfilesService petProfilesService, IImagePreloadService imagePreloadService)
     {
         _petProfilesService = petProfilesService;
+        _imagePreloadService = imagePreloadService;
         Title = "Pet Profiles";
         
         PetProfiles = new ObservableCollection<PetProfile>();
@@ -59,6 +62,9 @@ public class PetProfilesViewModel : BaseViewModel
             IsLoading = true;
 
             var profiles = await _petProfilesService.GetPetProfilesAsync();
+            
+            // Pre-load images BEFORE adding to UI
+            await _imagePreloadService.PreloadImagesAsync(profiles);
             
             // Only clear and update if we successfully got data
             PetProfiles.Clear();

@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Microsoft.Maui.Controls;
 
 namespace PetProfiles.Maui.Models;
 
@@ -10,6 +11,7 @@ public class PetProfile : INotifyPropertyChanged
     private string _breed = string.Empty;
     private int _age;
     private string? _imageUrl;
+    private ImageSource? _preloadedImage;
     private DateTime _createdAt;
     private DateTime _updatedAt;
 
@@ -41,6 +43,12 @@ public class PetProfile : INotifyPropertyChanged
     {
         get => _imageUrl;
         set => SetProperty(ref _imageUrl, value);
+    }
+
+    public ImageSource? PreloadedImage
+    {
+        get => _preloadedImage;
+        set => SetProperty(ref _preloadedImage, value);
     }
 
     public DateTime CreatedAt

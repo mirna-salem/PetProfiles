@@ -6,7 +6,12 @@ namespace PetProfiles.Maui.Converters;
 
 public class ImageSourceConverter : IValueConverter
 {
-    private static readonly ConcurrentDictionary<string, ImageSource> _imageCache = new ConcurrentDictionary<string, ImageSource>();
+    private static readonly ConcurrentDictionary<string, CachedImage> _imageCache = new ConcurrentDictionary<string, CachedImage>();
+    
+            // Static instance for sharing across the app
+        public static readonly ImageSourceConverter Instance = new ImageSourceConverter();
+        
+
     
     private static HttpClient CreateHttpClient()
     {
@@ -33,11 +38,18 @@ public class ImageSourceConverter : IValueConverter
         // Check cache first
         if (_imageCache.TryGetValue(imageUrl, out var cachedImage))
         {
-            return cachedImage;
+            if (!cachedImage.IsExpired)
+            {
+                return cachedImage.ImageSource;
+            }
+            else
+            {
+                // Remove expired entry
+                _imageCache.TryRemove(imageUrl, out _);
+            }
         }
 
-        // Debug print for troubleshooting
-        System.Diagnostics.Debug.WriteLine($"[ImageSourceConverter] Loading image URL: {imageUrl}");
+
 
         try
         {
@@ -49,36 +61,31 @@ public class ImageSourceConverter : IValueConverter
                     try
                     {
                         using var httpClient = CreateHttpClient();
-                        
-                        // Use ConfigureAwait(false) to avoid deadlocks
                         var response = httpClient.GetAsync(imageUrl).ConfigureAwait(false).GetAwaiter().GetResult();
-                        
-                        System.Diagnostics.Debug.WriteLine($"[ImageSourceConverter] HTTP Status: {response.StatusCode} for URL: {imageUrl}");
                         
                         if (response.IsSuccessStatusCode)
                         {
                             var stream = response.Content.ReadAsStreamAsync().ConfigureAwait(false).GetAwaiter().GetResult();
-                            System.Diagnostics.Debug.WriteLine($"[ImageSourceConverter] Successfully loaded stream, length: {stream?.Length ?? 0}");
                             return stream;
                         }
-                        
-                        var errorContent = response.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
-                        System.Diagnostics.Debug.WriteLine($"[ImageSourceConverter] Error response: {errorContent}");
                         return null;
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        System.Diagnostics.Debug.WriteLine($"[ImageSourceConverter] Error loading image: {ex.Message}");
                         return null;
                     }
                 });
-                _imageCache[imageUrl] = streamImage;
+                
+                // Cache for 1 hour to make it really fast
+                var apiCachedImage = new CachedImage(streamImage, TimeSpan.FromHours(1));
+                _imageCache[imageUrl] = apiCachedImage;
                 return streamImage;
             }
 
             // Handle other URLs (fallback)
             var fallbackImage = ImageSource.FromUri(new Uri(imageUrl));
-            _imageCache[imageUrl] = fallbackImage;
+            var fallbackCachedImage = new CachedImage(fallbackImage, TimeSpan.FromHours(1));
+            _imageCache[imageUrl] = fallbackCachedImage;
             return fallbackImage;
         }
         catch (Exception ex)
@@ -92,6 +99,25 @@ public class ImageSourceConverter : IValueConverter
 	{
 		throw new NotImplementedException();
 	}
+
+
+
+
+
+
+
+    private class CachedImage
+    {
+        public ImageSource ImageSource { get; }
+        public DateTime ExpirationTime { get; }
+        public bool IsExpired => DateTime.UtcNow > ExpirationTime;
+
+        public CachedImage(ImageSource imageSource, TimeSpan cacheDuration)
+        {
+            ImageSource = imageSource;
+            ExpirationTime = DateTime.UtcNow.Add(cacheDuration);
+        }
+    }
 }
 
 public class InverseBoolConverter : IValueConverter
